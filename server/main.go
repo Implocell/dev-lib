@@ -1,23 +1,32 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
-
-	"github.com/implocell/dev-lib/controllers"
-	"github.com/implocell/dev-lib/db"
+	"github.com/gin-gonic/gin"
+	"github.com/implocell/dev-lib/books"
+	"github.com/implocell/dev-lib/common"
+	"github.com/implocell/dev-lib/users"
+	"gorm.io/gorm"
 )
+
+func Migrate(db *gorm.DB) {
+	users.AutoMigrate()
+	books.AutoMigrate()
+}
 
 func main() {
 	// create the db instance
-	db.InitDB()
 
-	http.HandleFunc("/", HelloServer)
-	http.HandleFunc("/user/get", controllers.FindUser)
-	http.HandleFunc("/user/create", controllers.CreateUser)
-	http.ListenAndServe(":5000", nil)
-}
+	db := common.Init()
+	Migrate(db)
 
-func HelloServer(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, %s!", r.URL.Path[1:])
+	r := gin.Default()
+
+	v1 := r.Group("/api/v1")
+
+	users.Router(v1.Group("/user"))
+	v1.Use(users.AuthMiddleware(true))
+	users.ProtectedRouter(v1.Group("/user"))
+	books.ProtectedRouter(v1.Group("/books"))
+
+	r.Run(":5000")
 }
