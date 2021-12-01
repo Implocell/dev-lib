@@ -6,6 +6,7 @@ import (
 	"github.com/implocell/dev-lib/common"
 	"github.com/implocell/dev-lib/users"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type Location uint
@@ -29,7 +30,7 @@ type BookModel struct {
 	Location    Location
 	Borrowed    bool
 	Borrowable  bool
-	Tags        []TagModel     `gorm:"many2many:article_tags"`
+	Tags        []TagModel     `gorm:"many2many:book_tags"`
 	Comments    []CommentModel `gorm:"ForeignKey:BookID"`
 }
 
@@ -134,22 +135,17 @@ func SaveOne(data interface{}) error {
 func FindOneBook(condition interface{}) (BookModel, error) {
 	db := common.GetDB()
 	var model BookModel
-	tx := db.Begin()
-	tx.Where(condition).First(&model)
-	tx.Model(&model).Preload("User")
-	tx.Model(&model.Author).Preload("UserModel")
-	tx.Model(&model).Preload("Tags")
-	err := tx.Commit().Error
+	err := db.Preload("User.UserModel").Preload(clause.Associations).First(&model).Error
 	return model, err
 }
 
-func (self *BookModel) getComments() error {
+func (bookModel *BookModel) getComments() error {
 	db := common.GetDB()
 	tx := db.Begin()
-	tx.Model(self).Preload("Comments")
-	for i := range self.Comments {
-		tx.Model(&self.Comments[i]).Preload("User")
-		tx.Model(&self.Comments[i].User).Preload("UserModel")
+	tx.Model(bookModel).Preload("Comments")
+	for i := range bookModel.Comments {
+		tx.Model(&bookModel.Comments[i]).Preload("User")
+		tx.Model(&bookModel.Comments[i].User).Preload("UserModel")
 	}
 	err := tx.Commit().Error
 	return err
@@ -181,23 +177,24 @@ func FindManyBook(tag, author, limit, offset, favorited, user string) ([]BookMod
 	if tag != "" {
 		var tagModel TagModel
 		tx.Where(TagModel{Tag: tag}).First(&tagModel)
+
 		if tagModel.ID != 0 {
-			tx.Model(&tagModel).Offset(offset_int).Limit(limit_int).Preload("BookModels")
+			tx.Model(&tagModel).Association("BookModels").Find(&BookModel{})
 			count = tx.Model(&tagModel).Association("BookModels").Count()
 		}
 	} else if user != "" {
 		var userModel users.UserModel
-		tx.Where(users.UserModel{Username: user}).First(&userModel)
+		tx.Where(users.UserModel{Username: author}).First(&userModel)
 		bookUserModel := GetBookUserModel(userModel)
-
 		if bookUserModel.ID != 0 {
 			count = tx.Model(&bookUserModel).Association("BookModels").Count()
-			tx.Model(&bookUserModel).Offset(offset_int).Limit(limit_int).Preload("BookModels")
+			tx.Model(&bookUserModel).Association("BookModels")
 		}
 	} else if favorited != "" {
 		var userModel users.UserModel
 		tx.Where(users.UserModel{Username: favorited}).First(&userModel)
 		bookUserModel := GetBookUserModel(userModel)
+
 		if bookUserModel.ID != 0 {
 			var favoriteModels []FavoriteModel
 			tx.Where(FavoriteModel{
@@ -207,7 +204,7 @@ func FindManyBook(tag, author, limit, offset, favorited, user string) ([]BookMod
 			count = tx.Model(&bookUserModel).Association("FavoriteModels").Count()
 			for _, favorite := range favoriteModels {
 				var model BookModel
-				tx.Model(&favorite).Preload("Favorite")
+				tx.Model(&favorite).Association("Favorite")
 				models = append(models, model)
 			}
 		}
@@ -217,15 +214,15 @@ func FindManyBook(tag, author, limit, offset, favorited, user string) ([]BookMod
 	}
 
 	for i := range models {
-		tx.Model(&models[i]).Preload("User")
-		tx.Model(&models[i].Author).Preload("UserModel")
-		tx.Model(&models[i]).Preload("Tags")
+		tx.Preload("User").Find(&models[i])
+		tx.Preload("User.BookModels").Find(&models[i])
+		tx.Preload("Tags").Find(&models[i])
 	}
 	err = tx.Commit().Error
 	return models, count, err
 }
 
-func (self *BookUserModel) GetBookFeed(limit, offset string) ([]BookModel, int, error) {
+func (bookUserModel *BookUserModel) GetBookFeed(limit, offset string) ([]BookModel, int, error) {
 	db := common.GetDB()
 	var models []BookModel
 	var count int
@@ -240,19 +237,20 @@ func (self *BookUserModel) GetBookFeed(limit, offset string) ([]BookModel, int, 
 	}
 
 	tx := db.Begin()
-	followings := self.UserModel.GetFollowings()
-	var articleUserModels []uint
+	followings := bookUserModel.UserModel.GetFollowings()
+
+	var bookUserModels []uint
 	for _, following := range followings {
-		articleUserModel := GetBookUserModel(following)
-		articleUserModels = append(articleUserModels, articleUserModel.ID)
+		bookUserModel := GetBookUserModel(following)
+		bookUserModels = append(bookUserModels, bookUserModel.ID)
 	}
 
-	tx.Where("author_id in (?)", articleUserModels).Order("updated_at desc").Offset(offset_int).Limit(limit_int).Find(&models)
+	tx.Where("user_id in (?)", bookUserModels).Order("updated_at desc").Offset(offset_int).Limit(limit_int).Find(&models)
 
 	for i := range models {
-		tx.Model(&models[i]).Preload("Author")
-		tx.Model(&models[i].Author).Preload("UserModel")
-		tx.Model(&models[i]).Preload("Tags")
+		tx.Preload("User").Find(&models[i])
+		tx.Preload("User.UserModel").Find(&models[i])
+		tx.Preload("Tags").Find(&models[i])
 	}
 	err = tx.Commit().Error
 	return models, count, err
@@ -287,6 +285,6 @@ func DeleteBookModel(condition interface{}) error {
 
 func DeleteCommentModel(condition interface{}) error {
 	db := common.GetDB()
-	err := db.Where(condition).Delete(CommentModel{}).Error
+	err := db.Where(condition).Delete(&CommentModel{}).Error
 	return err
 }

@@ -46,7 +46,7 @@ func (UserModel) TableName() string {
 
 func (u *UserModel) setPassword(password string) error {
 	if len(password) == 0 {
-		return errors.New("password should not be empty!")
+		return errors.New("password should not be empty")
 	}
 	bytePassword := []byte(password)
 	// Make sure the second param `bcrypt generator cost` between [4, 32)
@@ -58,6 +58,7 @@ func (u *UserModel) setPassword(password string) error {
 func (u *UserModel) checkPassword(password string) error {
 	bytePassword := []byte(password)
 	byteHashedPassword := []byte(u.Password)
+
 	return bcrypt.CompareHashAndPassword(byteHashedPassword, bytePassword)
 }
 
@@ -108,7 +109,7 @@ func (u UserModel) unFollowing(v UserModel) error {
 	err := db.Where(FollowModel{
 		FollowingID:  v.ID,
 		FollowedByID: u.ID,
-	}).Delete(FollowModel{}).Error
+	}).Delete(&FollowModel{}).Error
 	return err
 }
 

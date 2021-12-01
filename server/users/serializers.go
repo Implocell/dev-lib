@@ -16,15 +16,18 @@ type ProfileResponse struct {
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
 	Role      Role   `json:"role"`
+	Following bool   `json:"following"`
 }
 
-func (self *ProfileSerializer) Response() ProfileResponse {
+func (ps *ProfileSerializer) Response() ProfileResponse {
+	userModel := ps.C.MustGet("user_model").(UserModel)
 	profile := ProfileResponse{
-		ID:        self.ID,
-		Username:  self.Username,
-		FirstName: self.FirstName,
-		LastName:  self.LastName,
-		Role:      self.Role,
+		ID:        ps.ID,
+		Username:  ps.Username,
+		FirstName: ps.FirstName,
+		LastName:  ps.LastName,
+		Role:      ps.Role,
+		Following: userModel.isFollowing(ps.UserModel),
 	}
 	return profile
 }
@@ -42,8 +45,8 @@ type UserResponse struct {
 	Token     string `json:"token"`
 }
 
-func (self *UserSerializer) Response() UserResponse {
-	userModel := self.c.MustGet("user_model").(UserModel)
+func (us *UserSerializer) Response() UserResponse {
+	userModel := us.c.MustGet("user_model").(UserModel)
 	user := UserResponse{
 		Username:  userModel.Username,
 		FirstName: userModel.FirstName,

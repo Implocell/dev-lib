@@ -18,14 +18,11 @@ func ProtectedRouter(g *gin.RouterGroup) {
 	g.DELETE("/:slug/favorite", BookUnfavorite)
 	g.POST("/:slug/comments", BookCommentCreate)
 	g.DELETE("/:slug/comments/:id", BookCommentDelete)
-	g.GET("/", BookList)
+	g.GET("", BookList)
 	g.GET("/:slug", BookRetrieve)
 	g.GET("/:slug/comments", BookCommentList)
+	g.GET("/tags", TagList)
 }
-
-// func TagsAnonymousRouter(g *gin.RouterGroup) {
-// 	g.GET("/", TagList)
-// }
 
 func BookCreate(c *gin.Context) {
 	bookModelValidator := NewBookModelValidator()
@@ -113,7 +110,7 @@ func BookUpdate(c *gin.Context) {
 		return
 	}
 	serializer := BookSerializer{c, bookModel}
-	c.JSON(http.StatusOK, gin.H{"article": serializer.Response()})
+	c.JSON(http.StatusOK, gin.H{"book": serializer.Response()})
 }
 
 func BookDelete(c *gin.Context) {

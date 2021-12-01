@@ -21,7 +21,7 @@ func main() {
 
 	r := gin.Default()
 
-	v1 := r.Group("/api/v1")
+	v1 := r.Group("/v1")
 
 	users.Router(v1.Group("/user"))
 	v1.Use(users.AuthMiddleware(true))
