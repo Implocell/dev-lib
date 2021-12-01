@@ -147,7 +147,7 @@ func (self *BookModel) getComments() error {
 	db := common.GetDB()
 	tx := db.Begin()
 	tx.Model(self).Preload("Comments")
-	for i, _ := range self.Comments {
+	for i := range self.Comments {
 		tx.Model(&self.Comments[i]).Preload("User")
 		tx.Model(&self.Comments[i].User).Preload("UserModel")
 	}
@@ -216,7 +216,7 @@ func FindManyBook(tag, author, limit, offset, favorited, user string) ([]BookMod
 		db.Offset(offset_int).Limit(limit_int).Find(&models)
 	}
 
-	for i, _ := range models {
+	for i := range models {
 		tx.Model(&models[i]).Preload("User")
 		tx.Model(&models[i].Author).Preload("UserModel")
 		tx.Model(&models[i]).Preload("Tags")
@@ -249,7 +249,7 @@ func (self *BookUserModel) GetBookFeed(limit, offset string) ([]BookModel, int, 
 
 	tx.Where("author_id in (?)", articleUserModels).Order("updated_at desc").Offset(offset_int).Limit(limit_int).Find(&models)
 
-	for i, _ := range models {
+	for i := range models {
 		tx.Model(&models[i]).Preload("Author")
 		tx.Model(&models[i].Author).Preload("UserModel")
 		tx.Model(&models[i]).Preload("Tags")

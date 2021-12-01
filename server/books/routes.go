@@ -135,6 +135,11 @@ func BookFavorite(c *gin.Context) {
 	}
 	userModel := c.MustGet("user_model").(users.UserModel)
 	err = bookModel.favoriteBy(GetBookUserModel(userModel))
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, common.NewError("books", errors.New("database error")))
+		return
+	}
+
 	serializer := BookSerializer{c, bookModel}
 	c.JSON(http.StatusOK, gin.H{"book": serializer.Response()})
 }
@@ -147,7 +152,13 @@ func BookUnfavorite(c *gin.Context) {
 		return
 	}
 	userModel := c.MustGet("user_model").(users.UserModel)
+
 	err = bookModel.unFavoriteBy(GetBookUserModel(userModel))
+	if err != nil {
+		c.JSON(http.StatusNotFound, common.NewError("books", errors.New("database error")))
+		return
+	}
+
 	serializer := BookSerializer{c, bookModel}
 	c.JSON(http.StatusOK, gin.H{"book": serializer.Response()})
 }
