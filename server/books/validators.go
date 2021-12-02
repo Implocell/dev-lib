@@ -49,6 +49,7 @@ func (s *BookModelValidator) Bind(c *gin.Context) error {
 	s.bookModel.Borrowable = s.Book.Borrowable
 	s.bookModel.Borrowed = s.Book.Borrowed
 	s.bookModel.setTags(s.Book.Tags)
+
 	return nil
 }
 
