@@ -90,6 +90,18 @@ func GetBookUserModel(userModel users.UserModel) BookUserModel {
 	return bookUserModel
 }
 
+func GetBookModel(model BookModel) BookModel {
+	var bookModel BookModel
+	if bookModel.ID == 0 {
+		return bookModel
+	}
+	db := common.GetDB()
+	db.Where(&BookModel{
+		Author: model.Author,
+	}).FirstOrCreate(&bookModel)
+	return bookModel
+}
+
 func (book BookModel) favoritesCount() int64 {
 	db := common.GetDB()
 	var count int64
@@ -177,10 +189,15 @@ func FindManyBook(tag, author, limit, offset, favorited, user string) ([]BookMod
 	if tag != "" {
 		var tagModel TagModel
 		tx.Where(TagModel{Tag: tag}).First(&tagModel)
-
 		if tagModel.ID != 0 {
-			tx.Model(&tagModel).Association("BookModels").Find(&BookModel{})
-			count = tx.Model(&tagModel).Association("BookModels").Count()
+			bookModels := tx.Model(&tagModel).Association("BookModels")
+			count = bookModels.Count()
+
+			books := []BookModel{}
+			bookModels.Find(&books)
+			for _, value := range books {
+				models = append(models, value)
+			}
 		}
 	} else if user != "" {
 		var userModel users.UserModel
@@ -207,6 +224,10 @@ func FindManyBook(tag, author, limit, offset, favorited, user string) ([]BookMod
 				tx.Model(&favorite).Association("Favorite")
 				models = append(models, model)
 			}
+		} else if author != "" {
+			var bookModel BookModel
+			tx.Where(BookModel{Author: author}).First(&bookModel)
+			models = append(models, bookModel)
 		}
 	} else {
 		db.Model(&models).Count(&count)
