@@ -1,10 +1,12 @@
-import ActiveLink from '../../components/ActiveLink';
+import Logo from './Logo';
+import Nav from './nav';
+import './styles.scss';
 
 const Header = () => {
     return (
-        <div>
-            <ActiveLink to='/login'>Login</ActiveLink>
-            <ActiveLink to='/register'>Register</ActiveLink>
+        <div className='header'>
+            <Logo />
+            <Nav />
         </div>
     );
 };
