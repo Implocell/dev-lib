@@ -1,11 +1,14 @@
+import useAccount from '../hooks/useAccount';
+
+export interface UserProps {
+    username: string;
+    firstName: string;
+    lastName: string;
+    role: number;
+    token: string;
+}
 export interface User {
-    user: {
-        username: string;
-        firstName: string;
-        lastName: string;
-        role: number;
-        token: string;
-    };
+    user: UserProps;
 }
 
 export interface Errors {
@@ -22,6 +25,6 @@ export const addAuthSession = (data: User | Errors) => {
     }
 
     sessionStorage.setItem('authToken', res.user.token);
-    // forward user to context
+    sessionStorage.setItem('user', JSON.stringify(res.user));
     return true;
 };

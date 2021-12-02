@@ -1,3 +1,9 @@
 import { createContext } from 'react';
+import { UserProps } from '../api/common';
 
-export const AccountContext = createContext({});
+interface AccountContextProps {
+    account: UserProps | undefined;
+    setAccount: (account: UserProps) => void;
+}
+
+export const AccountContext = createContext({} as AccountContextProps);
