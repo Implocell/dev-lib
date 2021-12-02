@@ -100,3 +100,37 @@
         }
     }
 }
+
+.book-add-container {
+    width: 500px;
+    height: 100px;
+    background-color: v.$secondary-bg-color;
+    color: v.$secondary-text-color;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    text-align: center;
+    .button-link {
+        margin-top: 10px;
+    }
+}
+
+.tag-list {
+    display: flex;
+    margin-top: 20px;
+
+    .tag-item{
+        cursor: pointer;
+        border-radius: 20px;
+        padding: 5px 10px;
+        background-color: v.$secondary-bg-color;
+        color: v.$secondary-text-color;
+        margin-right: 10px;
+        &:last-child{
+            margin-right:0;
+        }
+    }
+}

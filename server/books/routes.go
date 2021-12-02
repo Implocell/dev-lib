@@ -136,7 +136,6 @@ func BookFavorite(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, common.NewError("books", errors.New("database error")))
 		return
 	}
-
 	serializer := BookSerializer{c, bookModel}
 	c.JSON(http.StatusOK, gin.H{"book": serializer.Response()})
 }

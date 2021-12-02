@@ -12,6 +12,7 @@ import { logOut } from './api/common';
 import NoAuth from './utils/NoAuthRoute';
 import Books from './pages/Books';
 import { UserProps } from './api/types';
+import AddBook from './pages/AddBook';
 
 function App() {
     const [isAuth, setIsAuth] = useState(false);
@@ -52,6 +53,14 @@ function App() {
                                     <NoAuth auth={isAuth}>
                                         <Register />
                                     </NoAuth>
+                                }
+                            />
+                            <Route
+                                path='/books/add'
+                                element={
+                                    <GuardedRoute auth={isAuth}>
+                                        <AddBook />
+                                    </GuardedRoute>
                                 }
                             />
                             <Route

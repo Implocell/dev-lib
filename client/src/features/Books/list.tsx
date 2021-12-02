@@ -15,7 +15,7 @@ const List = ({ books }: { books: Book[] }) => {
                     <span className='book-item-borrow-available'>
                         Available:
                         <span
-                            className={book.borrowed ? 'red' : 'green'}
+                            className={!book.borrowed ? 'red' : 'green'}
                         ></span>
                     </span>
                 </div>
@@ -28,8 +28,8 @@ const List = ({ books }: { books: Book[] }) => {
         tags.map((tag) => <span className='book-item-tag'>{tag}</span>);
 
     const renderList = () => {
-        return books.map((book) => (
-            <li className='book-item'>
+        return books.map((book, index) => (
+            <li className='book-item' key={index}>
                 <div className='book-item-container'>
                     <div className='book-item-row'>
                         <div className='book-item-col'>
@@ -52,7 +52,6 @@ const List = ({ books }: { books: Book[] }) => {
                         {renderTags(book.tagList)}
                     </div>
                     <span className='book-item-favorite'>
-                        {book.slug}
                         <div
                             className='book-item-favorite-icon'
                             onClick={() => favoriteBook(book.slug)}

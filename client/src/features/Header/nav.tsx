@@ -50,11 +50,15 @@ const Nav = () => {
     const renderLinks = () => {
         if (isAuth) {
             return loggedInLinks.map((link) => (
-                <li className='nav-link'>{renderLink(link)}</li>
+                <li className='nav-link' key={link.to}>
+                    {renderLink(link)}
+                </li>
             ));
         }
         return loggedOutLinks.map((link) => (
-            <li className='nav-link'>{renderLink(link)}</li>
+            <li className='nav-link' key={link.to}>
+                {renderLink(link)}
+            </li>
         ));
     };
 

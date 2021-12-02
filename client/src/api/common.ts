@@ -6,6 +6,10 @@ export const addAuthSession = (data: User | Errors) => {
     if ('errors' in res) {
         return false;
     }
+    if (!res.user.username) {
+        logOut();
+        return false;
+    }
 
     sessionStorage.setItem('authToken', res.user.token);
     sessionStorage.setItem('user', JSON.stringify(res.user));

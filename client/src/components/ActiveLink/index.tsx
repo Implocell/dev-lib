@@ -13,7 +13,6 @@ const ActiveLink = ({ children, to, ...props }: LinkProps) => {
             >
                 {children}
             </Link>
-            {match && ' (active)'}
         </div>
     );
 };

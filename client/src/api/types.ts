@@ -18,6 +18,10 @@ export interface Book {
     borrowed: boolean;
 }
 
+export type PlainBook = Omit<
+    Book,
+    'user' | 'createdAt' | 'updatedAt' | 'slug' | 'favorited' | 'favoritesCount'
+>;
 export interface User {
     username: string;
     firstName: string;
@@ -41,4 +45,7 @@ export interface Errors {
     errors: {
         [key: string]: string;
     };
+}
+export interface Tags {
+    tags: string[];
 }

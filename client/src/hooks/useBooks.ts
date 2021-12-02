@@ -14,7 +14,6 @@ const useBooks = () => {
                 setError(res.errors);
                 return;
             }
-            console.log(res.books);
             setBooks(res.books);
             setCount(res.booksCount);
         }
@@ -22,7 +21,7 @@ const useBooks = () => {
         fetchBooks();
     }, []);
 
-    return { books, count, error };
+    return { books, count, error, setBooks, setCount };
 };
 
 export default useBooks;

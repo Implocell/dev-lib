@@ -97,7 +97,7 @@ func GetBookModel(model BookModel) BookModel {
 	}
 	db := common.GetDB()
 	db.Where(&BookModel{
-		Author: model.Author,
+		UserID: model.User.ID,
 	}).FirstOrCreate(&bookModel)
 	return bookModel
 }
@@ -147,7 +147,7 @@ func SaveOne(data interface{}) error {
 func FindOneBook(condition interface{}) (BookModel, error) {
 	db := common.GetDB()
 	var model BookModel
-	err := db.Preload("User.UserModel").Preload(clause.Associations).First(&model).Error
+	err := db.Preload("User.UserModel").Preload(clause.Associations).Where(condition).First(&model).Error
 	return model, err
 }
 
@@ -195,9 +195,7 @@ func FindManyBook(tag, author, limit, offset, favorited, user string) ([]BookMod
 
 			books := []BookModel{}
 			bookModels.Find(&books)
-			for _, value := range books {
-				models = append(models, value)
-			}
+			models = append(models, books...)
 		}
 	} else if user != "" {
 		var userModel users.UserModel
@@ -236,7 +234,7 @@ func FindManyBook(tag, author, limit, offset, favorited, user string) ([]BookMod
 
 	for i := range models {
 		tx.Preload("User").Find(&models[i])
-		tx.Preload("User.BookModels").Find(&models[i])
+		tx.Preload("User.UserModel").Find(&models[i])
 		tx.Preload("Tags").Find(&models[i])
 	}
 	err = tx.Commit().Error
