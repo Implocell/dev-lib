@@ -1,4 +1,4 @@
-@use './scss/vars';
+@use './scss/vars' as v;
 
 @import-normalize;
 
@@ -9,7 +9,7 @@ body {
         'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: red;
+    background-color: v.$primary-bg-color;
 }
 
 code {
@@ -19,6 +19,7 @@ code {
 
 .app {
     width: 100%;
+    height: calc(100vh - 75px);
     display: flex;
     flex-direction: column;
 }

@@ -1,0 +1,25 @@
+@use '../../scss/vars' as v;
+
+.button,
+.button-link {
+    width: 100px;
+    color: v.$primary-text-color;
+    padding: 5px 10px;
+    text-decoration: none;
+    background-color: v.$primary-bg-color;
+    border-radius: 40px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    text-transform: uppercase;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+}
+.secondary {
+    background-color: v.$secondary-bg-color;
+    color: v.$secondary-text-color;
+}
+
+.button-link:hover,
+.button:hover {
+    transform: scale(1.05);
+}

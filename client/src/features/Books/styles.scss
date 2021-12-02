@@ -1,0 +1,102 @@
+@use '../../scss/vars' as v;
+
+.book-list {
+    list-style: none;
+    width: 80%;
+
+    .book-item {
+        margin-bottom: 20px;
+        background-color: v.$tertiary-bg-color;
+        color: v.$primary-text-color;
+        border-radius: 10px;
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        &-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        &-col {
+            display: flex;
+            flex-direction: column;
+        }
+
+        &-container {
+            display: flex;
+            flex-direction: column;
+            padding: 10px 20px;
+        }
+        &-title {
+            margin: 0;
+        }
+
+        &-author {
+            margin-bottom: 10px;
+        }
+        &-description {
+            margin: 5px 0;
+        }
+
+        &-user {
+            margin-top: 5px;
+        }
+
+        &-favorite {
+            display: flex;
+            align-items: center;
+            .book-item-favorite-icon {
+                cursor: pointer;
+                margin: 0;
+                padding: 0;
+                align-self: center;
+            }
+            svg {
+                width: 15px;
+                fill: white;
+                stroke: white;
+            }
+
+            &-count {
+                margin-left: 5px;
+            }
+        }
+
+        &-borrow-available {
+            margin-top: 5px;
+            span {
+                margin-left: 5px;
+                padding: 1px 10px;
+                border-radius: 5px;
+                &.red {
+                    background-color: red;
+                }
+                &.green {
+                    background-color: green;
+                }
+            }
+        }
+
+        &-footer {
+            display: flex;
+            padding: 10px 20px;
+            justify-content: space-between;
+            background-color: v.$secondary-bg-color;
+            color: v.$secondary-text-color;
+            border-radius: 0 0 10px 10px;
+
+            .book-item-tag {
+                background-color: v.$primary-bg-color;
+                color: v.$primary-text-color;
+                padding: 2px 6px;
+                border-radius: 10px;
+                margin-right: 5px;
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+}

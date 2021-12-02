@@ -1,0 +1,52 @@
+@use '../../scss/vars' as v;
+
+.hero {
+    height: 60vh;
+    min-height: 50vh;
+    width: 100%;
+    background: #fff;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(222, 242, 241, 1) 50%,
+        rgba(222, 242, 241, 1) 100%
+    );
+    &-container {
+        display: flex;
+        height: 100%;
+
+        &-left {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            &-buttons{
+                height: 60px;
+                display: flex;
+                align-items: center;
+                .button-link{
+                    margin: 0 10px;
+                }
+            }
+        }
+        &-right {
+            width: 30%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+            svg {
+                margin-bottom: -2px;
+                height: 30vh;
+            }
+        }
+    }
+}
+
+.horizontal-line {
+    margin: 0;
+    width: 100%;
+    height: 25px;
+    background-color: v.$secondary-bg-color;
+}

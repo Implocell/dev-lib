@@ -1,5 +1,6 @@
 import request from './api';
-import { addAuthSession, Errors, User } from './common';
+import { addAuthSession } from './common';
+import { Errors, User } from './types';
 
 const register = async (
     email: string,
