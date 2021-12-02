@@ -21,7 +21,7 @@ func RandString(n int) string {
 	return string(b)
 }
 
-// Keep this two config private, it should not expose to open source
+// Should be set in env
 const NBSecretPassword = "A String Very Very Very Strong!!@##$!@#$"
 const NBRandomPassword = "A String Very Very Very Niubilty!!@##$!@#4"
 
@@ -38,8 +38,7 @@ func GenToken(id uint) string {
 	return token
 }
 
-// My own Error type that will help return my customized Error info
-//  {"database": {"hello":"no such table", error: "not_exists"}}
+// Custom error
 type CommonError struct {
 	Errors map[string]interface{} `json:"errors"`
 }

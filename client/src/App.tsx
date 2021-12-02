@@ -1,34 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Login from './features/Login';
+import Register from './features/Register';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Header from './features/Header';
+import GuardedRoute from './utils/GuardedRoute';
+import Home from './pages/Home';
 
 function App() {
-    const [value, setValue] = useState('');
-    useEffect(() => {
-        async function getData() {
-            const res = await fetch('/api');
-            const data = await res.text();
-            setValue(data);
-        }
-        getData()
-    }, []);
     return (
-        <div className='App'>
-            <header className='App-header'>
-                <img src={logo} className='App-logo' alt='logo' />
-                <p>
-                    Edit <code>src/App.tsx</code> and save to reload.
-                </p>
-                <a
-                    className='App-link'
-                    href='https://reactjs.org'
-                    target='_blank'
-                    rel='noopener noreferrer'
-                >
-                    Learn React
-                    {value && <span>{value}</span>}
-                </a>
-            </header>
+        <div className='app'>
+            <BrowserRouter>
+                <Header />
+                <Routes>
+                    <Route index element={<Home />} />
+                    <Route path='login' element={<Login />} />
+                    <Route
+                        path='register'
+                        element={
+                            <GuardedRoute auth={false}>
+                                <Register />
+                            </GuardedRoute>
+                        }
+                    />
+                </Routes>
+            </BrowserRouter>
         </div>
     );
 }

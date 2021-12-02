@@ -68,7 +68,6 @@ func (lv *LoginValidator) Bind(c *gin.Context) error {
 	return nil
 }
 
-// You can put the default value of a Validator here
 func NewLoginValidator() LoginValidator {
 	loginValidator := LoginValidator{}
 	return loginValidator

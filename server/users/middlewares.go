@@ -44,8 +44,6 @@ var MyAuth2Extractor = &request.MultiExtractor{
 	request.ArgumentExtractor{"access_token"},
 }
 
-// You can custom middlewares yourself as the doc: https://github.com/gin-gonic/gin#custom-middleware
-//  r.Use(AuthMiddleware(true))
 func AuthMiddleware(auto401 bool) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		UpdateContextUserModel(c, 0)

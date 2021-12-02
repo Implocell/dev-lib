@@ -10,6 +10,12 @@ services:
       context: ./nginx
     ports:
       - '3050:80'
+  postgres:
+    depends_on:
+      - api
+    image: 'postgres:latest'
+    environment:
+      - POSTGRES_PASSWORD=postgres_password
   api:
     build:
       dockerfile: Dockerfile.dev
