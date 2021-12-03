@@ -49,3 +49,34 @@ export interface Errors {
 export interface Tags {
     tags: string[];
 }
+
+export interface SingleBook {
+    book: Book;
+}
+
+export interface SingleComment {
+    comment: Comment;
+}
+
+export interface Comment {
+    id: number;
+    body: string;
+    createdAt: string;
+    updatedAt: string;
+    author: User;
+}
+
+export interface Comments {
+    comments: Comment[];
+}
+export interface UserProfile {
+    profile: Profile;
+}
+
+export interface Profile {
+    username: string;
+    firstName: string;
+    lastName: string;
+    role: number;
+    following: boolean;
+}

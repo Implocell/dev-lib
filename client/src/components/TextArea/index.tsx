@@ -25,9 +25,8 @@ const TextArea = ({
                 onChange={(e) => onChange(e.target.value)}
                 rows={rows}
                 cols={cols}
-            >
-                {value}
-            </textarea>
+                value={value}
+            />
         </div>
     );
 };

@@ -1,0 +1,10 @@
+.view-book {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &-container {
+        width: 80%;
+        margin-top: 2%;
+    }
+}

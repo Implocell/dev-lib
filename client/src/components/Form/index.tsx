@@ -1,12 +1,18 @@
+import React from 'react';
 import './styles.scss';
 interface Props {
     handleSubmit: (event: React.SyntheticEvent) => void;
     title: string;
-    children: React.ReactChild[];
+    children: React.ReactChild[] | React.ReactChild;
     customClass?: string;
 }
 
-const Form = ({ handleSubmit, title, children, customClass = '' }: Props) => {
+const Form: React.FC<Props> = ({
+    handleSubmit,
+    title,
+    children,
+    customClass = '',
+}) => {
     return (
         <div className='form-container'>
             <h2 className='form-title'>{title}</h2>

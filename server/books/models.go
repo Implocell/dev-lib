@@ -134,7 +134,7 @@ func (book BookModel) unFavoriteBy(user BookUserModel) error {
 	err := db.Where(FavoriteModel{
 		FavoriteID:   book.ID,
 		FavoriteByID: user.ID,
-	}).Error
+	}).Delete(&FavoriteModel{}).Error
 	return err
 }
 
@@ -156,8 +156,7 @@ func (bookModel *BookModel) getComments() error {
 	tx := db.Begin()
 	tx.Model(bookModel).Preload("Comments")
 	for i := range bookModel.Comments {
-		tx.Model(&bookModel.Comments[i]).Preload("User")
-		tx.Model(&bookModel.Comments[i].User).Preload("UserModel")
+		tx.Preload("User.UserModel").Find(&bookModel.Comments[i])
 	}
 	err := tx.Commit().Error
 	return err

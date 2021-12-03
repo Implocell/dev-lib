@@ -9,7 +9,7 @@ const useBooks = () => {
 
     useEffect(() => {
         async function fetchBooks() {
-            const res = await getBooks();
+            const res = await getBooks(20);
             if ('errors' in res) {
                 setError(res.errors);
                 return;

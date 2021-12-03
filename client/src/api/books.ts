@@ -1,6 +1,14 @@
-import Books from '../pages/Books';
 import request from './api';
-import { BookList, Errors, Book, PlainBook, Tags } from './types';
+import {
+    BookList,
+    Errors,
+    Book,
+    PlainBook,
+    Tags,
+    SingleBook,
+    Comments,
+    SingleComment,
+} from './types';
 
 export const getBooks = async (limit = 5) => {
     const res = await request(`books?limit=${limit}`, 'GET');
@@ -10,6 +18,10 @@ export const getBooks = async (limit = 5) => {
 
 export const favoriteBook = async (slug: string) => {
     await request(`books/${slug}/favorite`, 'POST');
+};
+
+export const unFavoriteBook = async (slug: string) => {
+    await request(`books/${slug}/favorite`, 'DELETE');
 };
 
 export const addBook = async ({
@@ -37,6 +49,38 @@ export const getTags = async () => {
 
 export const getBooksByTag = async (tag: string) => {
     const res = await request(`/books?tag=${tag}`, 'GET');
+    const data: BookList = await res.json();
+    return data;
+};
+
+export const getBookBySlug = async (tag: string) => {
+    const res = await request(`/books/${tag}`, 'GET');
+    const data: SingleBook = await res.json();
+    return data.book;
+};
+
+export const getBookComments = async (tag: string) => {
+    const res = await request(`/books/${tag}/comments`, 'GET');
+    const data: Comments = await res.json();
+    return data.comments;
+};
+
+export const createBookComment = async (tag: string, comment: string) => {
+    const jsonComment = JSON.stringify({ comment: { body: comment } });
+    const res = await request(`/books/${tag}/comments`, 'POST', jsonComment);
+    const data: SingleComment | Errors = await res.json();
+    return data;
+};
+
+export const getBookFeed = async () => {
+    const res = await request('/books/feed', 'GET');
+    const data: BookList = await res.json();
+
+    return data;
+};
+
+export const getUserFavoritedBooks = async (username: string) => {
+    const res = await request(`/books?favorited=${username}`, 'GET');
     const data: BookList = await res.json();
     return data;
 };

@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 import ActiveLink from '../../components/ActiveLink';
 import Button from '../../components/Button';
 import useAccount from '../../hooks/useAccount';
@@ -64,16 +65,22 @@ const Nav = () => {
 
     const renderUsername = () => {
         if (account) {
-            return <div className='nav-username'>{account.username}</div>;
+            return (
+                <Link to={`user/${account.username}`} className='nav-username'>
+                    {account.username}
+                </Link>
+            );
         }
     };
 
     return (
-        <ul className='nav'>
-            {renderLinks()}
-            {renderLoginOrLogout()}
-            {renderUsername()}
-        </ul>
+        <div className='navbar'>
+            <ul className='nav'>{renderLinks()}</ul>
+            <div className='user-actions'>
+                {renderLoginOrLogout()}
+                {renderUsername()}
+            </div>
+        </div>
     );
 };
 

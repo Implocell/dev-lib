@@ -13,6 +13,8 @@ import NoAuth from './utils/NoAuthRoute';
 import Books from './pages/Books';
 import { UserProps } from './api/types';
 import AddBook from './pages/AddBook';
+import ViewBook from './pages/ViewBook';
+import Profile from './pages/Profile';
 
 function App() {
     const [isAuth, setIsAuth] = useState(false);
@@ -68,6 +70,22 @@ function App() {
                                 element={
                                     <GuardedRoute auth={isAuth}>
                                         <Books />
+                                    </GuardedRoute>
+                                }
+                            />
+                            <Route
+                                path='/books/:slug'
+                                element={
+                                    <GuardedRoute auth={isAuth}>
+                                        <ViewBook />
+                                    </GuardedRoute>
+                                }
+                            />
+                            <Route
+                                path='/user/:username'
+                                element={
+                                    <GuardedRoute auth={isAuth}>
+                                        <Profile />
                                     </GuardedRoute>
                                 }
                             />

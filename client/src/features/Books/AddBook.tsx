@@ -5,7 +5,6 @@ import Checkbox from '../../components/Checkbox';
 import Form from '../../components/Form';
 import Input from '../../components/Input';
 import TextArea from '../../components/TextArea';
-import stringToBool from '../../utils/stringToBool';
 
 const AddBook = () => {
     const [title, setTitle] = useState('');
