@@ -1,5 +1,6 @@
 import request from './api';
-import { addAuthSession, Errors, User } from './common';
+import { addAuthSession } from './common';
+import { Errors, User } from './types';
 
 export const login = async (email: string, password: string) => {
     const loginInfo = JSON.stringify({ user: { email, password } });

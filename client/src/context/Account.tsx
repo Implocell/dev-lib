@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { UserProps } from '../api/common';
+import { UserProps } from '../api/types';
 
 interface AccountContextProps {
     account: UserProps | undefined;

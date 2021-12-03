@@ -1,0 +1,5 @@
+@use '../../scss/vars' as v;
+.title{
+    color: v.$primary-text-color;
+    font-size: 46px;
+}

@@ -1,10 +1,10 @@
 import { ReactComponent } from '../../assets/logo.svg';
-
+import { Link } from 'react-router-dom';
 const Logo = () => {
     return (
         <div className='logo'>
             <ReactComponent />
-            <h1>SkillSip</h1>
+            <Link to='/'>SkillSip</Link>
         </div>
     );
 };

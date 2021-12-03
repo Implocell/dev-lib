@@ -1,21 +1,4 @@
-import useAccount from '../hooks/useAccount';
-
-export interface UserProps {
-    username: string;
-    firstName: string;
-    lastName: string;
-    role: number;
-    token: string;
-}
-export interface User {
-    user: UserProps;
-}
-
-export interface Errors {
-    errors: {
-        [key: string]: string;
-    };
-}
+import { Errors, User } from './types';
 
 export const addAuthSession = (data: User | Errors) => {
     const res = data;
@@ -23,8 +6,17 @@ export const addAuthSession = (data: User | Errors) => {
     if ('errors' in res) {
         return false;
     }
+    if (!res.user.username) {
+        logOut();
+        return false;
+    }
 
     sessionStorage.setItem('authToken', res.user.token);
     sessionStorage.setItem('user', JSON.stringify(res.user));
     return true;
+};
+
+export const logOut = () => {
+    sessionStorage.removeItem('authToken');
+    sessionStorage.removeItem('user');
 };

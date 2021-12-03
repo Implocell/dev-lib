@@ -1,0 +1,4 @@
+@use '../../scss/vars' as v;
+.active-link{
+    color: v.$secondary-text-color;
+}

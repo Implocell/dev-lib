@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router';
 import registerApi from '../../api/register';
 import Button from '../../components/Button';
 import Form from '../../components/Form';
 import Input from '../../components/Input';
 
 const Register = () => {
+    const navigator = useNavigate();
     const [username, setUsername] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -16,14 +18,14 @@ const Register = () => {
         try {
             await registerApi(email, password, firstName, lastName, username);
 
-            // redirect user
+            navigator('/');
         } catch (error) {
             console.log(error);
         }
     };
 
     return (
-        <Form handleSubmit={handleSubmit}>
+        <Form handleSubmit={handleSubmit} title='Register'>
             <Input
                 displayName='Username'
                 id='username'

@@ -1,0 +1,11 @@
+@use '../scss/vars' as v;
+
+.books-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .count{
+        margin-bottom: 10px;
+        color: v.$primary-text-color;
+    }
+}

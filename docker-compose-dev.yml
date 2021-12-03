@@ -14,11 +14,6 @@ services:
     depends_on:
       - api
     image: 'postgres:latest'
-    command: postgres
-    volumes:
-      - ./backup:/var/backup
-    ports:
-      - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=postgres_password
   api:

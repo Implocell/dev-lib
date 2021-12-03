@@ -1,0 +1,13 @@
+.text-area {
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    textarea {
+        margin-left: 30px;
+        border-radius: 10px;
+        border: none;
+        padding: 5px;
+    }
+}

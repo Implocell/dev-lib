@@ -1,3 +1,5 @@
+import './styles.scss';
+
 interface Props {
     value: string;
     onChange: (value: string) => void;
@@ -8,7 +10,7 @@ interface Props {
 
 const Input = ({ value, onChange, type, id, displayName }: Props) => {
     return (
-        <div className='form-input'>
+        <div className='input'>
             <label htmlFor={id}>{displayName}:</label>
             <input
                 type={type}

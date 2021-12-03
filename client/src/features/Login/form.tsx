@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router';
 import loginApi from '../../api/login';
 import Button from '../../components/Button';
 import Form from '../../components/Form';
@@ -7,19 +8,21 @@ import Input from '../../components/Input';
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigator = useNavigate();
 
     const handleSubmit = async (event: React.SyntheticEvent) => {
         event.preventDefault();
         try {
             await loginApi(email, password);
-            //redirect user
+            navigator('/');
         } catch (error) {
+            setPassword('');
             console.log(error);
         }
     };
 
     return (
-        <Form handleSubmit={handleSubmit}>
+        <Form handleSubmit={handleSubmit} title='Login'>
             <Input
                 displayName='Email'
                 id='email'
