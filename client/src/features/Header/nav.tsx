@@ -1,9 +1,10 @@
+import { useContext } from 'react';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import ActiveLink from '../../components/ActiveLink';
 import Button from '../../components/Button';
+import { AuthActionKind, AuthContext } from '../../context/Auth';
 import useAccount from '../../hooks/useAccount';
-import useAuth from '../../hooks/useAuth';
 
 interface linkProps {
     to: string;
@@ -24,20 +25,19 @@ const loggedInLinks: linkProps[] = [
 
 const Nav = () => {
     const account = useAccount();
-    const { isAuth, logOutUser } = useAuth();
+    const { state, dispatch } = useContext(AuthContext);
     const navigator = useNavigate();
 
+    const handleLogout = () => {
+        dispatch({ type: AuthActionKind.LOGOUT });
+        navigator('/');
+    };
+
     const renderLoginOrLogout = () => {
-        if (!isAuth) {
+        if (!state.isAuth) {
             return <Button type='link' to='/login' text='Login' />;
         }
-        return (
-            <Button
-                type='button'
-                onClick={() => logOutUser(() => navigator('/'))}
-                text='Logout'
-            />
-        );
+        return <Button type='button' onClick={handleLogout} text='Logout' />;
     };
 
     const renderLink = (link: linkProps) => {
@@ -49,7 +49,7 @@ const Nav = () => {
     };
 
     const renderLinks = () => {
-        if (isAuth) {
+        if (state.isAuth) {
             return loggedInLinks.map((link) => (
                 <li className='nav-link' key={link.to}>
                     {renderLink(link)}
@@ -64,7 +64,7 @@ const Nav = () => {
     };
 
     const renderUsername = () => {
-        if (account) {
+        if (account && state.isAuth) {
             return (
                 <Link to={`user/${account.username}`} className='nav-username'>
                     {account.username}

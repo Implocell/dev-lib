@@ -7,7 +7,7 @@ export const isValidToken = async () => {
     const data: User | Errors = await res.json();
     const ok = addAuthSession(data);
     if (ok) {
-        return true;
+        return ok;
     }
     return false;
 };

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import { addBook } from '../../api/books';
 import Button from '../../components/Button';
 import Checkbox from '../../components/Checkbox';
@@ -13,6 +14,7 @@ const AddBook = () => {
     const [borrowable, setBorrowable] = useState(false);
     const [borrowed, setBorrowed] = useState(false);
     const [tagList, setTagList] = useState('');
+    const navigator = useNavigate();
 
     const handleSubmit = async (event: React.SyntheticEvent) => {
         const tags: string[] = tagList.split(',').map((tag) => tag.trim());
@@ -27,6 +29,7 @@ const AddBook = () => {
                 borrowed: flipBorrowed,
                 tagList: tags,
             });
+            navigator(-1);
         } catch (error) {
             console.log(error);
         }

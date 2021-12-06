@@ -9,7 +9,6 @@ const ViewBook = () => {
         <div className='view-book'>
             <div className='view-book-container'>
                 <RenderBook slug={slug} />
-                <AddComment slug={slug} />
                 <Comments slug={slug} />
             </div>
         </div>

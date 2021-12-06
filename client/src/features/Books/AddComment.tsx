@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { createBookComment } from '../../api/books';
+import { SingleComment } from '../../api/types';
 import Button from '../../components/Button';
 import Form from '../../components/Form';
 import TextArea from '../../components/TextArea';
@@ -10,18 +11,20 @@ const CommentForm = ({
     isOpen,
     setIsOpen,
     slug,
+    updateComments,
 }: {
     isOpen: boolean;
     setIsOpen: (value: boolean) => void;
     slug: string;
+    updateComments: (comment: SingleComment) => void;
 }) => {
     const [body, setBody] = useState('');
 
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
-        await createBookComment(slug, body);
+        const comment = await createBookComment(slug, body);
+        updateComments(comment);
         setIsOpen(false);
-        console.log('comment submitted');
     };
 
     if (!isOpen) return null;
@@ -37,6 +40,13 @@ const CommentForm = ({
                         value={body}
                     />
                     <Button type='submit' text='Add comment' />
+                    <button
+                        className='modal-container-exit'
+                        onClick={() => setIsOpen(false)}
+                        type='button'
+                    >
+                        x
+                    </button>
                 </Form>
             </div>
         </div>,
@@ -46,9 +56,10 @@ const CommentForm = ({
 
 interface AddCommentProps {
     slug: string | undefined;
+    updateComments: (comment: SingleComment) => void;
 }
 
-const AddComment = ({ slug }: AddCommentProps) => {
+const AddComment = ({ slug, updateComments }: AddCommentProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
     if (!slug) {
@@ -63,7 +74,12 @@ const AddComment = ({ slug }: AddCommentProps) => {
                 customClass='secondary'
                 onClick={() => setIsOpen(true)}
             />
-            <CommentForm isOpen={isOpen} setIsOpen={setIsOpen} slug={slug} />
+            <CommentForm
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                slug={slug}
+                updateComments={updateComments}
+            />
         </div>
     );
 };
