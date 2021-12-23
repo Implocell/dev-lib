@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getBookComments } from '../../api/books';
-import { Comment } from '../../api/types';
+import { Comment, SingleComment } from '../../api/types';
+import AddComment from './AddComment';
 import './styles.scss';
 
 interface Props {
@@ -8,6 +9,7 @@ interface Props {
 }
 
 const RenderSingleComment = (comment: Comment) => {
+    console.log(comment)
     const renderDate = () => {
         let chosenDate: string;
         let dateString = 'Created at:';
@@ -54,6 +56,10 @@ const Comments = ({ slug }: Props) => {
         fetchComments();
     }, [slug]);
 
+    const updateComments = (comment: SingleComment) => {
+        setComments((prev) => [...prev, comment.comment]);
+    };
+
     const renderComments = () => {
         if (!comments) {
             return null;
@@ -65,7 +71,12 @@ const Comments = ({ slug }: Props) => {
         return null;
     }
 
-    return <div className='comments'>{renderComments()}</div>;
+    return (
+        <>
+            <AddComment slug={slug} updateComments={updateComments} />
+            <div className='comments'>{renderComments()}</div>
+        </>
+    );
 };
 
 export default Comments;

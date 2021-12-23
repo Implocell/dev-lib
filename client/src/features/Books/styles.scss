@@ -203,3 +203,14 @@
         }
     }
 }
+
+.modal-container{
+    position: relative;
+
+    .modal-container-exit{
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+    
+}

@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
 import registerApi from '../../api/register';
 import Button from '../../components/Button';
 import Form from '../../components/Form';
 import Input from '../../components/Input';
+import { AuthActionKind, AuthContext } from '../../context/Auth';
 
 const Register = () => {
     const navigator = useNavigate();
+    const { dispatch } = useContext(AuthContext);
     const [username, setUsername] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -17,7 +19,7 @@ const Register = () => {
         event.preventDefault();
         try {
             await registerApi(email, password, firstName, lastName, username);
-
+            dispatch({ type: AuthActionKind.LOGIN });
             navigator('/');
         } catch (error) {
             console.log(error);

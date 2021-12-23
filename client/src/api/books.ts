@@ -8,6 +8,7 @@ import {
     SingleBook,
     Comments,
     SingleComment,
+    Comment,
 } from './types';
 
 export const getBooks = async (limit = 5) => {
@@ -68,7 +69,7 @@ export const getBookComments = async (tag: string) => {
 export const createBookComment = async (tag: string, comment: string) => {
     const jsonComment = JSON.stringify({ comment: { body: comment } });
     const res = await request(`/books/${tag}/comments`, 'POST', jsonComment);
-    const data: SingleComment | Errors = await res.json();
+    const data: SingleComment = await res.json();
     return data;
 };
 
